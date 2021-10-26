@@ -1,18 +1,29 @@
 <template>
   <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <button @click="onClick">Clicked {{ counter }} times!</button>
+<counterButton />
   </div>
 </template>
 
 <script>
 // @ is an alias to /src
-import HelloWorld from '@/components/HelloWorld.vue'
+import counterButton from '@/components/counterButton.vue'
 
 export default {
   name: 'Home',
   components: {
-    HelloWorld
-  }
+    counterButton
+  },
+  
+  data () {
+      return {
+        counter: 0,
+      }
+    },
+    methods: {
+      onClick () {
+        this.counter++
+       }
+    }
 }
 </script>
