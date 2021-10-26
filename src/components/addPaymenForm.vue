@@ -1,19 +1,18 @@
 <template>
-  <div :class="[$style.wrapper, form]">
+  <div :class="[$style.wrapper]">
       <!--
     <input placeholder="id" v-model="number" />
-
 input убрал потому как id (number) убрал потому как он сам добавляется в обьект
-
     -->
     <input placeholder="date" v-model="date" />
     <input placeholder="category" v-model="category" />
     <input placeholder="value" v-model="value" />
     
     <button @click="onSaveClick">Save!</button>
-
+<!--
     <button @click="getCurrentDate1">Save! {{ today1 }}</button>
     {{ getCurrentDate }}
+    -->
   </div>
 </template>
 
@@ -61,8 +60,13 @@ export default {
 };
 </script>
 <style lang="scss" module>
-.form {
+.wrapper {
+    
   background-color: cadetblue;
   border: 1px solid red;
+  width: 150px;
+}
+.input{
+    font-size: 18px;
 }
 </style>

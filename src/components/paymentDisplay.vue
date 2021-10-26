@@ -9,7 +9,6 @@
     <!-- <div v-for="(item,idx) in items" :key="idx">
       {{ item }}
     </div>
-
     Хотим тут отобразить данные -->
   </div>
 </template>

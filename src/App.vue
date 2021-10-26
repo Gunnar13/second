@@ -16,44 +16,51 @@
         <!-- <PaymentsDisplay :items="'any list data'" />-->
       </main>
 
-      <CounterButton />
       <!--
-      <button v-if="showKey">
-        <PaymentForm @addNewPayment="addNewPayment" />
-          
+      <CounterButton />
+      
+      -->
+      <div :class="[$style.form]">
+        <div>
+        <button @click="showKey = !showKey">Add New Cost</button>
+        </div>
+        <div :class="[$style.value]" >Total : 
+         {{total}}
+
+        </div>
         
-      </button>-->
-      <PaymentForm @addNewPayment="addNewPayment" />
+      </div>
+      <div v-if="showKey"><PaymentForm @addNewPayment="addNewPayment" /></div>
     </div>
   </div>
 </template>
 <script>
 // @ is an alias to /src
-import CounterButton from "@/components/counterButton.vue";
+//import CounterButton from "@/components/counterButton.vue";
 import PaymentsDisplay from "@/components/paymentDisplay.vue";
 import PaymentForm from "@/components/addPaymenForm.vue";
 //import AddPaymentForm from './components/AddPaymentForm
-
 export default {
   //name: 'Home',
   components: {
-    CounterButton,
+    //CounterButton,
     PaymentsDisplay,
     PaymentForm,
   },
-
   data() {
     return {
       paymentsList: [],
       showKey: false,
+      total:0,
     };
   },
   methods: {
     addNewPayment(data) {
       data.number = data.number + this.paymentsList.length;
       this.paymentsList = [...this.paymentsList, data];
+      //this.total=data.value
+      this.total+=Number(data.value)
     },
-
     fetchData() {
       return [
         {
@@ -77,8 +84,13 @@ export default {
       ];
     },
   },
+ 
   created() {
     this.paymentsList = this.fetchData();
+    for (let item in this.paymentsList){
+      this.total+=this.paymentsList[item].value
+    }
+    
   },
 };
 </script>
@@ -90,13 +102,11 @@ export default {
   text-align: center;
   color: #2c3e50;
 }
-
 .wrapper {
   background-color: aquamarine;
   border: 1px solid black;
   width: 700px;
 }
-
 .title {
   text-align: center;
   //border: 1px solid black;
@@ -123,18 +133,12 @@ export default {
 .value {
   border: 1px solid black;
   width: 100px;
+  text-align: center;
 }
+.form {
+  display: flex;
+  justify-content: space-between;
 
-#nav {
-  padding: 30px;
-
-  a {
-    font-weight: bold;
-    color: #2c3e50;
-
-    &.router-link-exact-active {
-      color: #42b983;
-    }
-  }
+  
 }
 </style>
