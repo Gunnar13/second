@@ -16,20 +16,21 @@
         <!-- <PaymentsDisplay :items="'any list data'" />-->
       </main>
 
-      <CounterButton />
       <!--
-      <button v-if="showKey">
-        <PaymentForm @addNewPayment="addNewPayment" />
-          
+      <CounterButton />
+      
+      -->
+      <div :class="[$style.date]">
+        <button @click="showKey = !showKey">Add New Cost</button>
         
-      </button>-->
-      <PaymentForm @addNewPayment="addNewPayment" />
+      </div>
+      <div v-if="showKey"><PaymentForm @addNewPayment="addNewPayment" /></div>
     </div>
   </div>
 </template>
 <script>
 // @ is an alias to /src
-import CounterButton from "@/components/counterButton.vue";
+//import CounterButton from "@/components/counterButton.vue";
 import PaymentsDisplay from "@/components/paymentDisplay.vue";
 import PaymentForm from "@/components/addPaymenForm.vue";
 //import AddPaymentForm from './components/AddPaymentForm
@@ -37,7 +38,7 @@ import PaymentForm from "@/components/addPaymenForm.vue";
 export default {
   //name: 'Home',
   components: {
-    CounterButton,
+    //CounterButton,
     PaymentsDisplay,
     PaymentForm,
   },
@@ -46,6 +47,7 @@ export default {
     return {
       paymentsList: [],
       showKey: false,
+      total:Number,
     };
   },
   methods: {
@@ -77,8 +79,10 @@ export default {
       ];
     },
   },
+ 
   created() {
     this.paymentsList = this.fetchData();
+    
   },
 };
 </script>
