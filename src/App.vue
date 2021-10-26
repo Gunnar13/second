@@ -20,8 +20,14 @@
       <CounterButton />
       
       -->
-      <div :class="[$style.date]">
+      <div :class="[$style.form]">
+        <div>
         <button @click="showKey = !showKey">Add New Cost</button>
+        </div>
+        <div :class="[$style.value]" >Total : 
+         {{total}}
+
+        </div>
         
       </div>
       <div v-if="showKey"><PaymentForm @addNewPayment="addNewPayment" /></div>
@@ -34,7 +40,6 @@
 import PaymentsDisplay from "@/components/paymentDisplay.vue";
 import PaymentForm from "@/components/addPaymenForm.vue";
 //import AddPaymentForm from './components/AddPaymentForm
-
 export default {
   //name: 'Home',
   components: {
@@ -42,20 +47,20 @@ export default {
     PaymentsDisplay,
     PaymentForm,
   },
-
   data() {
     return {
       paymentsList: [],
       showKey: false,
-      total:Number,
+      total:0,
     };
   },
   methods: {
     addNewPayment(data) {
       data.number = data.number + this.paymentsList.length;
       this.paymentsList = [...this.paymentsList, data];
+      //this.total=data.value
+      this.total+=Number(data.value)
     },
-
     fetchData() {
       return [
         {
@@ -82,6 +87,9 @@ export default {
  
   created() {
     this.paymentsList = this.fetchData();
+    for (let item in this.paymentsList){
+      this.total+=this.paymentsList[item].value
+    }
     
   },
 };
@@ -94,13 +102,11 @@ export default {
   text-align: center;
   color: #2c3e50;
 }
-
 .wrapper {
   background-color: aquamarine;
   border: 1px solid black;
   width: 700px;
 }
-
 .title {
   text-align: center;
   //border: 1px solid black;
@@ -127,18 +133,12 @@ export default {
 .value {
   border: 1px solid black;
   width: 100px;
+  text-align: center;
 }
+.form {
+  display: flex;
+  justify-content: space-between;
 
-#nav {
-  padding: 30px;
-
-  a {
-    font-weight: bold;
-    color: #2c3e50;
-
-    &.router-link-exact-active {
-      color: #42b983;
-    }
-  }
+  
 }
 </style>

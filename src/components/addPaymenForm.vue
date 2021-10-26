@@ -2,9 +2,7 @@
   <div :class="[$style.wrapper]">
       <!--
     <input placeholder="id" v-model="number" />
-
 input убрал потому как id (number) убрал потому как он сам добавляется в обьект
-
     -->
     <input placeholder="date" v-model="date" />
     <input placeholder="category" v-model="category" />
