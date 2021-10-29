@@ -12,6 +12,7 @@
       </header>
 
       <main>
+        {{ getFPV }}
         <PaymentsDisplay :items="paymentsList" />
         <!-- <PaymentsDisplay :items="'any list data'" />-->
       </main>
@@ -36,7 +37,8 @@
 </template>
 <script>
 // @ is an alias to /src
-//import CounterButton from "@/components/counterButton.vue";
+import { mapMutations } from 'vuex';
+import { mapGetters } from 'vuex'
 import PaymentsDisplay from "@/components/paymentDisplay.vue";
 import PaymentForm from "@/components/addPaymenForm.vue";
 //import AddPaymentForm from './components/AddPaymentForm
@@ -54,15 +56,42 @@ export default {
       total:0,
     };
   },
+  computed: {
+    ...mapGetters([
+       'getPaymentsList',
+    ]),
+
+    getFPV () {
+      return this.$store.getters.getFullPaymentValue
+    }
+  },
+
   methods: {
+     ...mapMutations([
+      'setPaymentsListData',
+    ]),
+
+
+
+
+
     addNewPayment(data) {
       data.number = data.number + this.paymentsList.length;
       this.paymentsList = [...this.paymentsList, data];
-      //this.total=data.value
       this.total+=Number(data.value)
     },
     fetchData() {
-      return [
+      const items = []
+      for (let i=1; i<=20; i++){
+      items.push({
+        number: i,
+        date: "28.03.2020",
+        category: "Food",
+        value: i,
+      })
+      }
+    return items
+      /*[
         {
           number: ++this.paymentsList.length,
           date: "28.03.2020",
@@ -81,16 +110,22 @@ export default {
           category: "Food",
           value: 532,
         },
-      ];
+      ];*/
     },
+
   },
  
   created() {
+    this.setPaymentsListData(this.fetchData())
+
+    //this.$store.commit('setPaymentsListData', this.fetchData());
+
+/*
     this.paymentsList = this.fetchData();
     for (let item in this.paymentsList){
       this.total+=this.paymentsList[item].value
     }
-    
+    */
   },
 };
 </script>

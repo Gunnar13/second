@@ -18,6 +18,8 @@ input убрал потому как id (number) убрал потому как 
 
 
 <script>
+import { mapMutations } from 'vuex'
+
 export default {
   name: "AddPaymetForm",
   data() {
@@ -30,25 +32,28 @@ export default {
     };
   },
   methods: {
-    getCurrentDate1() {
-      this.today1 = new Date();
-      //const d = today.getDate()
-      //const m = today.getMonth() + 1
-      //const y = today.getFullYear()
-      return this.today1;
-    },
+    
     onSaveClick() {
       const data = {
         number: 1,//++this.number,
-        
+        //amount: +this.amount,
         date: this.date || this.getCurrentDate,
         category: this.category,
-        value: this.value
+        value: this.value,
+        //type: this.type,
+        
       };
       this.$emit("addNewPayment", data);
+      //this.commit('setPaymentsListData', data);
     },
   },
   computed: {
+    
+    ...mapMutations([
+      'setPaymentsListData',
+    ]),
+      
+
     getCurrentDate() {
       const today = new Date();
       const d = today.getDate();
