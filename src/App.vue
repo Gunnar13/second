@@ -12,7 +12,7 @@
       </header>
 
       <main>
-        {{ getFPV }}
+        
         <PaymentsDisplay :items="paymentsList" />
         <!-- <PaymentsDisplay :items="'any list data'" />-->
       </main>
@@ -26,12 +26,12 @@
         <button @click="showKey = !showKey">Add New Cost</button>
         </div>
         <div :class="[$style.value]" >Total : 
-         {{total}}
-
+        {{total}}
+          {{ getFPV }}
         </div>
         
       </div>
-      <div v-if="showKey"><PaymentForm @addNewPayment="addNewPayment" /></div>
+      <div v-if="showKey"><PaymentForm @addNewPayment="addDataToPaymentsList" /></div>
     </div>
   </div>
 </template>
@@ -41,6 +41,8 @@ import { mapMutations } from 'vuex';
 import { mapGetters } from 'vuex'
 import PaymentsDisplay from "@/components/paymentDisplay.vue";
 import PaymentForm from "@/components/addPaymenForm.vue";
+
+
 //import AddPaymentForm from './components/AddPaymentForm
 export default {
   //name: 'Home',
@@ -51,15 +53,17 @@ export default {
   },
   data() {
     return {
-      paymentsList: [],
+      
+      //paymentsList: [],
       showKey: false,
       total:0,
     };
   },
   computed: {
-    ...mapGetters([
+    ...mapGetters({
+       paymentsList: 
        'getPaymentsList',
-    ]),
+    }),
 
     getFPV () {
       return this.$store.getters.getFullPaymentValue
@@ -67,19 +71,25 @@ export default {
   },
 
   methods: {
-     ...mapMutations([
+    /* ...mapMutations([
       'setPaymentsListData',
     ]),
+    */
+
+    ...mapMutations({
+        updatePayments: 'setPaymentsListData',
+        addData: 'addDataToPaymentsList'
+    }),
 
 
 
-
-
+/*
     addNewPayment(data) {
       data.number = data.number + this.paymentsList.length;
       this.paymentsList = [...this.paymentsList, data];
       this.total+=Number(data.value)
     },
+    */
     fetchData() {
       const items = []
       for (let i=1; i<=20; i++){
@@ -88,10 +98,10 @@ export default {
         date: "28.03.2020",
         category: "Food",
         value: i,
-      })
+      });
       }
     return items
-      /*[
+     /* [
         {
           number: ++this.paymentsList.length,
           date: "28.03.2020",
@@ -112,13 +122,21 @@ export default {
         },
       ];*/
     },
-
+    addDataToPaymentsList(item){
+      //this.paymentsList.push(item)
+      const date = new Date;
+      const data = {...item, ...{number: date.getMilliseconds()}};
+      this.addData(data)
+    }
   },
  
   created() {
-    this.setPaymentsListData(this.fetchData())
+    this.updatePayments(this.fetchData())
+    //this.setPaymentsListData(this.fetchData())
+
 
     //this.$store.commit('setPaymentsListData', this.fetchData());
+    this.$store.dispatch('fetchData')
 
 /*
     this.paymentsList = this.fetchData();
