@@ -7,7 +7,7 @@ input убрал потому как id (number) убрал потому как 
     <input placeholder="date" v-model="date" />
     <input placeholder="category" v-model="category" />
     <input placeholder="value" v-model="value" />
-    
+    <SelectCategory v-model="category" />
     <button @click="onSaveClick">Save!</button>
 <!--
     <button @click="getCurrentDate1">Save! {{ today1 }}</button>
@@ -19,32 +19,39 @@ input убрал потому как id (number) убрал потому как 
 
 <script>
 import { mapMutations } from 'vuex'
-
+import SelectCategory from "@/components/SelectCategory.vue";
 export default {
   name: "AddPaymetForm",
+  components: {
+    //CounterButton,
+    SelectCategory,
+    
+  },
   data() {
     return {
       number : '',
       date: '',
       category: '',
       value: '',
-      today1: "rrr",
+      
     };
   },
   methods: {
     
     onSaveClick() {
       const data = {
-        number: 1,//++this.number,
+        number: ++this.number,
         //amount: +this.amount,
         date: this.date || this.getCurrentDate,
         category: this.category,
-        value: this.value,
+        value: Number(this.value),
         //type: this.type,
         
       };
       this.$emit("addNewPayment", data);
       //this.commit('setPaymentsListData', data);
+       
+
     },
   },
   computed: {
@@ -52,7 +59,6 @@ export default {
     ...mapMutations([
       'setPaymentsListData',
     ]),
-      
 
     getCurrentDate() {
       const today = new Date();
@@ -60,7 +66,7 @@ export default {
       const m = today.getMonth() + 1;
       const y = today.getFullYear();
       return `${d}.${m}.${y}`;
-    },
+    }
   },
 };
 </script>
