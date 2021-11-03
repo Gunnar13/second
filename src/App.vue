@@ -13,8 +13,11 @@
 
       <main>
         
-        <PaymentsDisplay :items="paymentsList" />
+        <PaymentsDisplay :items="currentElements" />
+        
         <!-- <PaymentsDisplay :items="'any list data'" />-->
+        <Pagination @paginate="changePage" :length="paymentsList.length" :cur="page" :n="count"/>
+       
       </main>
 
       <!--
@@ -26,7 +29,7 @@
         <button @click="showKey = !showKey">Add New Cost</button>
         </div>
         <div :class="[$style.value]" >Total : 
-        {{total}}
+        {{page}},{{count}},
           {{ getFPV }}
         </div>
         
@@ -41,6 +44,7 @@ import { mapMutations } from 'vuex';
 import { mapGetters } from 'vuex'
 import PaymentsDisplay from "@/components/paymentDisplay.vue";
 import PaymentForm from "@/components/addPaymenForm.vue";
+import Pagination from '@/components/Pagination.vue';
 
 
 //import AddPaymentForm from './components/AddPaymentForm
@@ -50,10 +54,12 @@ export default {
     //CounterButton,
     PaymentsDisplay,
     PaymentForm,
+    Pagination,
   },
   data() {
     return {
-      
+      page:1,
+      count:10,
       //paymentsList: [],
       showKey: false,
       total:0,
@@ -67,10 +73,18 @@ export default {
 
     getFPV () {
       return this.$store.getters.getFullPaymentValue
-    }
+    },
+    currentElements(){
+      const {count, page} = this;
+      return this.paymentsList.slice(count*(page-1), count*(page-1) + count)
+    },
   },
 
   methods: {
+    changePage(p){
+      this.page=p;
+
+    },
     /* ...mapMutations([
       'setPaymentsListData',
     ]),
@@ -92,7 +106,7 @@ export default {
     */
     fetchData() {
       const items = []
-      for (let i=1; i<=20; i++){
+      for (let i=1; i<=100; i++){
       items.push({
         number: i,
         date: "28.03.2020",
