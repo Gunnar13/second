@@ -10,12 +10,26 @@
       {{ item }}
     </div>
     Хотим тут отобразить данные -->
+    {{ getFPV }}
   </div>
 </template>
 
 
 <script>
+import { mapGetters } from 'vuex'
+
 export default {
+  computed: {
+    getFPV () {
+      return this.$store.getters.getFullPaymentValue
+    },
+
+    ...mapGetters([
+      'getPaymentsList',
+    ])
+
+  },
+
   
   props: {
     items: {
