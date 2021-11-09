@@ -9,6 +9,9 @@ import store from './store' //после обьявления его надо п
 Vue.config.productionTip = false
 
 new Vue({
+ /* props: {
+    pageName: String,
+ },*/
   router,
   
   store,        //и добавить тут после подключения

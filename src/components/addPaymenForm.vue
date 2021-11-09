@@ -8,7 +8,8 @@ input убрал потому как id (number) убрал потому как 
     <input placeholder="category" v-model="category" />
     <input placeholder="value" v-model="value" />
     <SelectCategory v-model="category" />
-    <button @click="onSaveClick">Save!</button>
+    <button v-if="!value || !category" @click="onSaveClick" disabled>Save!</button>
+    <button v-else @click="onSaveClick">Save!</button>
 <!--
     <button @click="getCurrentDate1">Save! {{ today1 }}</button>
     {{ getCurrentDate }}
@@ -31,27 +32,45 @@ export default {
     return {
       number : '',
       date: '',
-      category: '',
-      value: '',
+      category: this.$route.params.pathMatch.slice(1),
+      value: this.$route.query.value,
       
     };
   },
+  /*created(){
+
+    this.getCurrentDate() {
+      const today = new Date();
+      const d = today.getDate();
+      const m = today.getMonth() + 1;
+      const y = today.getFullYear();
+      return `${d}.${m}.${y}`
+    }
+
+  },*/
   methods: {
     
     onSaveClick() {
+
+      /*
+      
+      this.value=this.$route.query.value;
+      this.$route.query.value=this.$route.params.value;
+      alert(this.$route.params.value);
+      */
+
       const data = {
         number: ++this.number,
         //amount: +this.amount,
         date: this.date || this.getCurrentDate,
         category: this.category,
-        value: Number(this.value),
+        //category: data.$route.params.category,
+        value: Number(this.value)//Number(this.value) || Number(this.genVal)
         //type: this.type,
         
       };
       this.$emit("addNewPayment", data);
-      //this.commit('setPaymentsListData', data);
-       
-
+      
     },
   },
   computed: {
@@ -59,13 +78,17 @@ export default {
     ...mapMutations([
       'setPaymentsListData',
     ]),
-
+/*
+    genVal(){
+      alert(this.$route.query.value)
+      return Number(this.$route.query.value)
+    },*/
     getCurrentDate() {
       const today = new Date();
       const d = today.getDate();
       const m = today.getMonth() + 1;
       const y = today.getFullYear();
-      return `${d}.${m}.${y}`;
+      return `${d}.${m}.${y}`
     }
   },
 };

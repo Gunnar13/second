@@ -36,7 +36,7 @@ export default new Vuex.Store({ //инициализируем vuex
          // имитируем работу с сетью, ставим задержку получения данных в 1 секунду
          setTimeout(() => {
           const items = []
-          for (let i=1; i<=20; i++){
+          for (let i=1; i<=100; i++){
           items.push({
             number: i,
             date: "28.03.2020",
