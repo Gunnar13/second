@@ -1,144 +1,92 @@
 <template>
   <div id="app">
-    <div :class="[$style.wrapper]">
-      <header>
-        <div :class="[$style.title]">My personal costs</div>
-        <div :class="[$style.title_content]">
-          <div :class="[$style.id_number]">#</div>
-          <div :class="[$style.date]">Date</div>
-          <div :class="[$style.category]">Category</div>
-          <div :class="[$style.value]">Value</div>
-        </div>
-      </header>
-
-      <main>
-        <PaymentsDisplay :items="paymentsList" />
-        <!-- <PaymentsDisplay :items="'any list data'" />-->
-      </main>
-
-      <!--
-      <CounterButton />
-      
-      -->
-      <div :class="[$style.form]">
-        <div>
-        <button @click="showKey = !showKey">Add New Cost</button>
-        </div>
-        <div :class="[$style.value]" >Total : 
-         {{total}}
-
-        </div>
-        
-      </div>
-      <div v-if="showKey"><PaymentForm @addNewPayment="addNewPayment" /></div>
+    <div>
+      <nav>
+        <a href="dashboard">Dashboard</a> / <a href="about">About</a> /
+        <a href="NotFound">dev/null</a> /
+      </nav>
+      <dashboard v-if="pageName === 'dashboard'" />
+      <About v-if="pageName === 'about'" />
+      <not-found v-if="pageName === 'NotFound'" />
+      <add-paymen-form v-if="pageName === 'PaymentForm'" />
     </div>
+    <router-link to="/dashboard">dashboard</router-link> /
+    <router-link to="/about">about</router-link> /
+    <router-link to="/notfound">notfound</router-link> /
+    <router-link to="/dashboard/5/">5</router-link> /
+    <!--
+      <router-link to="/PaymentForm">Transportt //</router-link>
+    <router-link to="/dashboard/?showKey=true/">Transportt</router-link>
+-->
+    
+    <router-view />
   </div>
 </template>
 <script>
 // @ is an alias to /src
-//import CounterButton from "@/components/counterButton.vue";
-import PaymentsDisplay from "@/components/paymentDisplay.vue";
-import PaymentForm from "@/components/addPaymenForm.vue";
-//import AddPaymentForm from './components/AddPaymentForm
+//resolve(['Food', 'Transport', 'Education', 'Entertainment'])
+import Dashboard from "@/views/Dashboard.vue";
+import About from "@/views/About.vue";
+import NotFound from "./views/NotFound.vue";
+
+//import AddPaymenForm from './components/addPaymenForm.vue';
+
 export default {
-  //name: 'Home',
+  name: 'App',
   components: {
     //CounterButton,
-    PaymentsDisplay,
-    PaymentForm,
-  },
-  data() {
-    return {
-      paymentsList: [],
-      showKey: false,
-      total:0,
-    };
-  },
-  methods: {
-    addNewPayment(data) {
-      data.number = data.number + this.paymentsList.length;
-      this.paymentsList = [...this.paymentsList, data];
-      //this.total=data.value
-      this.total+=Number(data.value)
-    },
-    fetchData() {
-      return [
-        {
-          number: ++this.paymentsList.length,
-          date: "28.03.2020",
-          category: "Food",
-          value: 169,
-        },
-        {
-          number: ++this.paymentsList.length,
-          date: "24.03.2020",
-          category: "Transport",
-          value: 360,
-        },
-        {
-          number: ++this.paymentsList.length,
-          date: "24.03.2020",
-          category: "Food",
-          value: 532,
-        },
-      ];
-    },
-  },
- 
-  created() {
-    this.paymentsList = this.fetchData();
-    for (let item in this.paymentsList){
-      this.total+=this.paymentsList[item].value
-    }
+    Dashboard,
+    About,
+    NotFound,
     
   },
+  data() {
+    //NotFound() {
+    return {
+      page: 1,
+      count: 10,
+      pageName: ""
+    };
+  },
+
+
+  created() {
+    //this.$router.push({ name: 'Dashboard' })
+    //this.setPaymentsListData(this.fetchData())
+
+    // this.updatePayments(this.fetchData());
+    //this.setPaymentsListData(this.fetchData())
+
+    //this.$store.commit('setPaymentsListData', this.fetchData());
+    this.$store.dispatch("fetchData");
+    
+  },
+
+  /*
+  mounted() {
+    const links = document.querySelectorAll("a");
+    links.forEach((link) => {
+      link.addEventListener("click", (event) => {
+        event.preventDefault();
+        history.pushState({}, '', link.href)
+        //this.$root.$emit('router-go')
+        this.setPage()
+      });
+    });
+
+    this.setPage();
+    window.addEventListener("hashchange", () => {
+      this.setPage();
+    });
+    this.setPage()
+    window.addEventListener('popstate', this.setPage)
+    //popstate позволяет переходить на предыдущую страницу!!!
+  },
+  */
+
+
 };
 </script>
 <style lang="scss" module>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
-.wrapper {
-  background-color: aquamarine;
-  border: 1px solid black;
-  width: 700px;
-}
-.title {
-  text-align: center;
-  //border: 1px solid black;
-  font-size: 28px;
-}
-.title_content {
-  border: 1px solid black;
-  display: flex;
-  box-sizing: border-box;
-  text-align: center;
-}
-.date {
-  border: 1px solid black;
-  width: 150px;
-}
-.id_number {
-  border: 1px solid black;
-  width: 50px;
-}
-.category {
-  border: 1px solid black;
-  width: 400px;
-}
-.value {
-  border: 1px solid black;
-  width: 100px;
-  text-align: center;
-}
-.form {
-  display: flex;
-  justify-content: space-between;
 
-  
-}
 </style>

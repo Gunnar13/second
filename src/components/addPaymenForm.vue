@@ -7,8 +7,9 @@ input убрал потому как id (number) убрал потому как 
     <input placeholder="date" v-model="date" />
     <input placeholder="category" v-model="category" />
     <input placeholder="value" v-model="value" />
-    
-    <button @click="onSaveClick">Save!</button>
+    <SelectCategory v-model="category" />
+    <button v-if="!value || !category" @click="onSaveClick" disabled>Save!</button>
+    <button v-else @click="onSaveClick">Save!</button>
 <!--
     <button @click="getCurrentDate1">Save! {{ today1 }}</button>
     {{ getCurrentDate }}
@@ -18,44 +19,77 @@ input убрал потому как id (number) убрал потому как 
 
 
 <script>
+import { mapMutations } from 'vuex'
+import SelectCategory from "@/components/SelectCategory.vue";
 export default {
   name: "AddPaymetForm",
+  components: {
+    //CounterButton,
+    SelectCategory,
+    
+  },
   data() {
     return {
       number : '',
       date: '',
-      category: '',
-      value: '',
-      today1: "rrr",
+      category: this.$route.params.pathMatch.slice(1),
+      value: this.$route.query.value,
+      
     };
   },
+  /*created(){
+
+    this.getCurrentDate() {
+      const today = new Date();
+      const d = today.getDate();
+      const m = today.getMonth() + 1;
+      const y = today.getFullYear();
+      return `${d}.${m}.${y}`
+    }
+
+  },*/
   methods: {
-    getCurrentDate1() {
-      this.today1 = new Date();
-      //const d = today.getDate()
-      //const m = today.getMonth() + 1
-      //const y = today.getFullYear()
-      return this.today1;
-    },
+    
     onSaveClick() {
+
+      /*
+      
+      this.value=this.$route.query.value;
+      this.$route.query.value=this.$route.params.value;
+      alert(this.$route.params.value);
+      */
+
       const data = {
-        number: 1,//++this.number,
-        
+        number: ++this.number,
+        //amount: +this.amount,
         date: this.date || this.getCurrentDate,
         category: this.category,
-        value: this.value
+        //category: data.$route.params.category,
+        value: Number(this.value)//Number(this.value) || Number(this.genVal)
+        //type: this.type,
+        
       };
       this.$emit("addNewPayment", data);
+      
     },
   },
   computed: {
+    
+    ...mapMutations([
+      'setPaymentsListData',
+    ]),
+/*
+    genVal(){
+      alert(this.$route.query.value)
+      return Number(this.$route.query.value)
+    },*/
     getCurrentDate() {
       const today = new Date();
       const d = today.getDate();
       const m = today.getMonth() + 1;
       const y = today.getFullYear();
-      return `${d}.${m}.${y}`;
-    },
+      return `${d}.${m}.${y}`
+    }
   },
 };
 </script>
